@@ -44,7 +44,7 @@ public class OrderController {
   }
 
   @PutMapping("/orders/{id}")
-  public EntityModel<Order> update(Long id, Order order) {
+  public EntityModel<Order> update(@PathVariable(value = "id", required = true) Long id, Order order) {
     Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
       .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
       .andAffordance(afford(methodOn(OrderController.class).delete(order.getId())));
@@ -52,9 +52,8 @@ public class OrderController {
     return model;
   }
 
-  @DeleteMapping("/order/{id}")
-  public ResponseEntity<Void> delete(Long id) {
+  @DeleteMapping("/orders/{id}")
+  public ResponseEntity<Void> delete(@PathVariable(value = "id", required = true) Long id) {
     return ResponseEntity.ok().build();
   }
-
 }

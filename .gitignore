@@ -13,3 +13,5 @@ gradle-app.setting
 
 .idea/
 *.iml
+
+pacts/
