@@ -3,10 +3,12 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
 	id "io.freefair.lombok" version "5.2.1"
+	id "au.com.dius.pact" version "4.1.7"
+	id "com.wiredforcode.spawn" version "0.8.2"
 }
 
 group = 'io.pactflow.example'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '11'
 
 repositories {
@@ -25,4 +27,25 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+task startServer(type: SpawnProcessTask, dependsOn: 'assemble') {
+	command "java -jar ${projectDir}/build/libs/siren-provider-0.0.1.jar"
+	ready 'Started SirenProviderApplication'
+}
+
+task stopServer(type: KillProcessTask)
+
+pact {
+	serviceProviders {
+		"Siren Order Provider" {
+
+			startProviderTask = startServer
+			terminateProviderTask = stopServer
+
+			hasPactWith("Siren Consumer") {
+				pactSource = file("${projectDir}/../consumer/pacts/Siren Order Provider-Siren Order Service.json")
+			}
+		}
+	}
 }

@@ -6,10 +6,12 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.RepresentationModel;
 import org.springframework.hateoas.server.EntityLinks;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping(value = "/", method = RequestMethod.GET)
 public class RootController {
 
   static class Root extends RepresentationModel<Root> {}
@@ -17,8 +19,8 @@ public class RootController {
   @Autowired
   private EntityLinks entityLinks;
 
-  @GetMapping("/")
-  public ResponseEntity<RepresentationModel<?>> orders() {
+  @RequestMapping("/")
+  public ResponseEntity<RepresentationModel<?>> root() {
     Link link = entityLinks.linkToCollectionResource(Order.class).withRel("orders");
     return ResponseEntity.ok().body(new Root().add(link));
   }

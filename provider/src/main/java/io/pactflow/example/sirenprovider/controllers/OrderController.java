@@ -20,11 +20,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @ExposesResourceFor(Order.class)
-@RequestMapping("/orders")
+@RequestMapping(value = "/orders")
 public class OrderController {
 
-  @GetMapping("/orders")
-  public RepresentationModel<?> orders() {
+  @GetMapping
+  public ResponseEntity<RepresentationModel<?>> orders() {
     Order order = new Order(1234L);
     Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
       .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
@@ -32,20 +32,20 @@ public class OrderController {
     EntityModel<Order> model = EntityModel.of(order, selfLink);
     RepresentationModel<?> orders = CollectionModel.of(model);
     orders.add(linkTo(methodOn(OrderController.class).orders()).withSelfRel());
-    return orders;
+    return ResponseEntity.ok(orders);
   }
 
-  @GetMapping("/orders/{id}")
-  public EntityModel<Order> order(@PathVariable(value = "id", required = true) Long id) {
+  @GetMapping(value = "/{id}")
+  public ResponseEntity<EntityModel<Order>> order(@PathVariable(value = "id", required = true) Long id) {
     Order order = new Order(id);
     Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
       .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
       .andAffordance(afford(methodOn(OrderController.class).delete(order.getId())));
     EntityModel<Order> model = EntityModel.of(order, selfLink);
-    return model;
+    return ResponseEntity.ok(model);
   }
 
-  @PutMapping("/orders/{id}")
+  @PutMapping("/{id}")
   public EntityModel<Order> update(@PathVariable(value = "id", required = true) Long id, Order order) {
     Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
       .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
@@ -54,7 +54,7 @@ public class OrderController {
     return model;
   }
 
-  @DeleteMapping("/orders/{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable(value = "id", required = true) Long id) {
     return ResponseEntity.ok().build();
   }
