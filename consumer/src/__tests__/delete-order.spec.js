@@ -28,6 +28,20 @@ describe("Siren Pact test", () => {
 
   it('deletes the first order using the delete action', () => {
     provider
+      .uponReceiving("get root")
+      .withRequest({
+        path: "/",
+      })
+      .willRespondWith({
+        status: 200,
+        headers: {
+          'Content-Type': 'application/vnd.siren+json'
+        },
+        body: {
+          class:[ "representation"],
+          links:[{"rel":["orders"], "href":  url("http://localhost:9000", ["orders"]) }]
+        }
+      })
       .uponReceiving("get all orders")
       .withRequest({
         path: "/orders",
