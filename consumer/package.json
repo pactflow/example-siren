@@ -1,0 +1,14 @@
+{
+  "name": "siren-consumer",
+  "version": "0.0.0",
+  "description": "Example Siren consumer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^26.4.2"
+  }
+}
