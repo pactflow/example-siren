@@ -2,8 +2,10 @@ package io.pactflow.example.sirenprovider;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 
 @SpringBootApplication
+@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class SirenProviderApplication {
 
   public static void main(String[] args) {
