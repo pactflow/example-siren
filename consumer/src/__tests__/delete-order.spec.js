@@ -28,6 +28,8 @@ describe("Siren Pact test", () => {
 
   it('deletes the first order using the delete action', () => {
     provider
+
+      // Get Root Request
       .uponReceiving("get root")
       .withRequest({
         path: "/",
@@ -42,6 +44,8 @@ describe("Siren Pact test", () => {
           links:[{"rel":["orders"], "href":  url("http://localhost:9000", ["orders"]) }]
         }
       })
+
+      // Get Orders Request
       .uponReceiving("get all orders")
       .withRequest({
         path: "/orders",
@@ -86,6 +90,8 @@ describe("Siren Pact test", () => {
           ]
         }
       })
+
+      // Delete Order Request
       .uponReceiving("delete order")
       .withRequest({
         method: "DELETE",
