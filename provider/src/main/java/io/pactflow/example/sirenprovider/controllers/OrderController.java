@@ -25,7 +25,7 @@ public class OrderController {
 
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> orders() {
-    Order order = new Order(1234L);
+    Order order = new Order(23475765L);
     Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
       .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
       .andAffordance(afford(methodOn(OrderController.class).delete(order.getId())));
