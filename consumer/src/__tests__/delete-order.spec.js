@@ -11,7 +11,8 @@ const {
   eachLike,
   url,
   integer,
-  regex
+  regex,
+  arrayContaining
 } = MatchersV3
 
 describe("Siren Pact test", () => {
@@ -69,7 +70,7 @@ describe("Siren Pact test", () => {
                 "href": url("http://localhost:9000", ["orders", regex("\\d+", "1234")])
               }
             ],
-            "actions": [
+            "actions": arrayContaining(
               {
                 "name": "update",
                 "method": "PUT",
@@ -80,8 +81,8 @@ describe("Siren Pact test", () => {
                 "method": "DELETE",
                 "href": url("http://localhost:9000", ["orders", regex("\\d+", "1234")])
               }
-            ]
-          }, 2),
+            )
+          }),
           links: [
             {
               rel: [ "self" ],

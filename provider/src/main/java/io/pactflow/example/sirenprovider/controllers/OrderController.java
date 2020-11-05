@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Random;
+
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.afford;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -25,7 +27,7 @@ public class OrderController {
 
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> orders() {
-    Order order = new Order(23475765L);
+    Order order = new Order(new Random().nextLong());
     Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
       .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
       .andAffordance(afford(methodOn(OrderController.class).delete(order.getId())));
