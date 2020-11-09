@@ -27,10 +27,9 @@ public class OrderController {
 
   @GetMapping
   public ResponseEntity<RepresentationModel<?>> orders() {
-    Order order = new Order(new Random().nextLong());
-    Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
-      .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
-      .andAffordance(afford(methodOn(OrderController.class).delete(order.getId())));
+    Long id = Math.abs(new Random().nextLong());
+    Order order = new Order(id);
+    Link selfLink = actions(order);
     EntityModel<Order> model = EntityModel.of(order, selfLink);
     RepresentationModel<?> orders = CollectionModel.of(model);
     orders.add(linkTo(methodOn(OrderController.class).orders()).withSelfRel());
@@ -40,20 +39,29 @@ public class OrderController {
   @GetMapping(value = "/{id}")
   public ResponseEntity<EntityModel<Order>> order(@PathVariable(value = "id", required = true) Long id) {
     Order order = new Order(id);
-    Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
-      .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
-      .andAffordance(afford(methodOn(OrderController.class).delete(order.getId())));
+    Link selfLink = actions(order);
     EntityModel<Order> model = EntityModel.of(order, selfLink);
     return ResponseEntity.ok(model);
   }
 
   @PutMapping("/{id}")
   public EntityModel<Order> update(@PathVariable(value = "id", required = true) Long id, Order order) {
-    Link selfLink = linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
+    Link selfLink = actions(order);
+    return EntityModel.of(order, selfLink);
+  }
+
+  private Link actions(Order order) {
+    return linkTo(methodOn(OrderController.class).order(order.getId())).withSelfRel()
       .andAffordance(afford(methodOn(OrderController.class).update(order.getId(), null)))
-      .andAffordance(afford(methodOn(OrderController.class).delete(order.getId())));
-    EntityModel<Order> model = EntityModel.of(order, selfLink);
-    return model;
+      .andAffordance(afford(methodOn(OrderController.class).delete(order.getId())))
+      .andAffordance(afford(methodOn(OrderController.class).changeStatus(order.getId(), null)));
+  }
+
+  @PutMapping("/{id}/status")
+  public EntityModel<Order> changeStatus(@PathVariable(value = "id", required = true) Long id, String status) {
+    Order order = new Order(id);
+    Link selfLink = actions(order);
+    return EntityModel.of(order, selfLink);
   }
 
   @DeleteMapping("/{id}")
