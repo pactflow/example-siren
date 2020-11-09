@@ -2,7 +2,7 @@
 Example project using [Siren](https://github.com/kevinswiber/siren) for hypermedia entities and testing with Pact.
 
 This project has two sub-projects, a provider springboot project which is using `spring-hateoas-siren` to provide Siren
-responses and a Javascript consumer project `ketting` to parse and navigate the Siren responses. 
+responses and a Javascript consumer project using `ketting` to parse and navigate the Siren responses. 
 
 ## Provider Project
 
