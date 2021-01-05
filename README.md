@@ -108,12 +108,10 @@ The problem with using normal Pact tests to test this scenario is that Siren res
 actions. The URLs when running the consumer test will be different than those when verifying the provider. This will 
 result in a verification failure.
 
-To get round this problem, we use the `url` matcher function from the consumer Pact DSL. This function takes a base URL,
-and a list of path fragments. The path fragments can be either plain strings or regular expressions. It then constructs
-the actual URL to use in the consumer test, and a regular expression matcher that can match the URLs in the provider
-verification test.
-
-To show this working, the consumer Pact test has the mock server running on port 9000, while the provider will be running on port 8080.
+To get round this problem, we use the `url` matcher function from the consumer Pact DSL. This function takes a list of 
+path fragments. The path fragments can be either plain strings or regular expressions. It then constructs
+the actual URL to use in the consumer test using the mock servers base URL, and a regular expression matcher that can 
+match the URLs in the provider verification test.
 
 ### Dealing with hypermedia formats like Siren actions
 
@@ -158,12 +156,12 @@ For example, in the consumer test we can specify:
   {
     "name": "update",
     "method": "PUT",
-    "href": url("http://localhost:9000", ["orders", regex("\\d+", "1234")])
+    "href": url(["orders", regex("\\d+", "1234")])
   },
   {
     "name": "delete",
     "method": "DELETE",
-    "href": url("http://localhost:9000", ["orders", regex("\\d+", "1234")])
+    "href": url(["orders", regex("\\d+", "1234")])
   }
 )
 ```
