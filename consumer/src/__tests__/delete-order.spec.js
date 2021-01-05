@@ -22,7 +22,6 @@ describe("Siren Pact test", () => {
     provider = new PactV3({
       consumer: "Siren Order Provider",
       provider: "Siren Order Service",
-      port: 9000,
       dir: path.resolve(process.cwd(), "pacts")
     })
   })
@@ -41,8 +40,8 @@ describe("Siren Pact test", () => {
           'Content-Type': 'application/vnd.siren+json'
         },
         body: {
-          class:[ "representation"],
-          links:[{"rel":["orders"], "href":  url("http://localhost:9000", ["orders"]) }]
+          class: [ "representation"],
+          links: [{"rel":["orders"], "href":  url(["orders"]) }]
         }
       })
 
@@ -67,26 +66,26 @@ describe("Siren Pact test", () => {
             links: [
               {
                 "rel": [ "self" ],
-                "href": url("http://localhost:9000", ["orders", regex("\\d+", "1234")])
+                "href": url(["orders", regex("\\d+", "1234")])
               }
             ],
             "actions": arrayContaining(
               {
                 "name": "update",
                 "method": "PUT",
-                "href": url("http://localhost:9000", ["orders", regex("\\d+", "1234")])
+                "href": url(["orders", regex("\\d+", "1234")])
               },
               {
                 "name": "delete",
                 "method": "DELETE",
-                "href": url("http://localhost:9000", ["orders", regex("\\d+", "1234")])
+                "href": url(["orders", regex("\\d+", "1234")])
               }
             )
           }),
           links: [
             {
               rel: [ "self" ],
-              href: url("http://localhost:9000", ["orders"])
+              href: url(["orders"])
             }
           ]
         }
