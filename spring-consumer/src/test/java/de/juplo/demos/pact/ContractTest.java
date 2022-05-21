@@ -21,6 +21,55 @@ import static org.assertj.core.api.Assertions.fail;
 public class ContractTest
 {
   @Pact(consumer="SpringConsumer")
+  public RequestResponsePact getRoot(PactDslWithProvider builder)
+  {
+    return builder
+        .uponReceiving("get root")
+        .path("/")
+        .method("GET")
+        .willRespondWith()
+        .status(200)
+        .headers(Map.of("Content-Type", "application/vnd.siren+json"))
+        .body(LambdaDsl.newJsonBody(body ->
+        {
+          body.array("class", classArray ->
+          {
+            classArray.stringValue("representation");
+          });
+          body.array("links", linksArray ->
+          {
+            linksArray.object(object->
+            {
+              object.matchUrl2("href", "orders");
+              object.array("rel", relArray ->
+              {
+                relArray.stringValue("orders");
+              });
+            });
+          });
+        }).build())
+        .toPact();
+  }
+
+  @Test
+  @PactTestFor(pactMethod = "getRoot")
+  public void testGetRoot(MockServer mockServer)
+  {
+    RestTemplate restTemplate =
+        new RestTemplateBuilder()
+            .rootUri(mockServer.getUrl())
+            .build();
+    try
+    {
+      restTemplate.getForEntity("/", String.class);
+    }
+    catch (Exception e)
+    {
+      fail("Unexpected exception", e);
+    }
+  }
+
+  @Pact(consumer="SpringConsumer")
   public RequestResponsePact getAllOrders(PactDslWithProvider builder)
   {
     return builder

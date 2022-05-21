@@ -207,6 +207,54 @@
         },
         "status": 200
       }
+    },
+    {
+      "description": "get root",
+      "request": {
+        "method": "GET",
+        "path": "/"
+      },
+      "response": {
+        "body": {
+          "class": [
+            "representation"
+          ],
+          "links": [
+            {
+              "href": "http://localhost:8080/orders",
+              "rel": [
+                "orders"
+              ]
+            }
+          ]
+        },
+        "generators": {
+          "body": {
+            "$.links[0].href": {
+              "example": "http://localhost:8080/orders",
+              "regex": ".*\\/(\\Qorders\\E)$",
+              "type": "MockServerURL"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/vnd.siren+json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.links[0].href": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": ".*\\/(\\Qorders\\E)$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
     }
   ],
   "metadata": {
