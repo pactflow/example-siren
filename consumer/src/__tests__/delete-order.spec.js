@@ -32,7 +32,8 @@ describe("Siren Pact test", () => {
       // Get Root Request
       .uponReceiving("get root")
       .withRequest({
-        path: "/",
+        method: "GET",
+        path: "/"
       })
       .willRespondWith({
         status: 200,
@@ -48,6 +49,7 @@ describe("Siren Pact test", () => {
       // Get Orders Request
       .uponReceiving("get all orders")
       .withRequest({
+        method: "GET",
         path: "/orders",
       })
       .willRespondWith({
