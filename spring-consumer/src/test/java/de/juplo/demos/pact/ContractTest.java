@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.fail;
 public class ContractTest
 {
   @Pact(consumer="SpringConsumer")
-  public RequestResponsePact getRoot(PactDslWithProvider builder)
+  public RequestResponsePact deletesTheFirstOrderUsingtheDeleteAction(PactDslWithProvider builder)
   {
     return builder
         .uponReceiving("get root")
@@ -48,121 +48,71 @@ public class ContractTest
             });
           });
         }).build())
-        .toPact();
-  }
-
-  @Test
-  @PactTestFor(pactMethod = "getRoot")
-  public void testGetRoot(MockServer mockServer)
-  {
-    RestTemplate restTemplate =
-        new RestTemplateBuilder()
-            .rootUri(mockServer.getUrl())
-            .build();
-    try
-    {
-      restTemplate.getForEntity("/", String.class);
-    }
-    catch (Exception e)
-    {
-      fail("Unexpected exception", e);
-    }
-  }
-
-  @Pact(consumer="SpringConsumer")
-  public RequestResponsePact getAllOrders(PactDslWithProvider builder)
-  {
-    return builder
-          .uponReceiving("get all orders")
-            .path("/orders")
-            .method("GET")
-          .willRespondWith()
-            .status(200)
-            .headers(Map.of("Content-Type", "application/vnd.siren+json"))
-            .body(LambdaDsl.newJsonBody(body ->
+        .uponReceiving("get all orders")
+        .path("/orders")
+        .method("GET")
+        .willRespondWith()
+        .status(200)
+        .headers(Map.of("Content-Type", "application/vnd.siren+json"))
+        .body(LambdaDsl.newJsonBody(body ->
+        {
+          body.array("class", classArray ->
+          {
+            classArray.stringValue("entity");
+          });
+          body.eachLike("entities", entities ->
+          {
+            entities.arrayContaining("actions", actionsArray->
             {
-              body.array("class", classArray ->
+              actionsArray.object(object ->
               {
-                classArray.stringValue("entity");
+                object.stringType("name","update");
+                object.stringType("method", "PUT");
+                object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
               });
-              body.eachLike("entities", entities ->
+              actionsArray.object(object ->
               {
-                entities.arrayContaining("actions", actionsArray->
+                object.stringType("name","delete");
+                object.stringType("method", "DELETE");
+                object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
+              });
+            });
+            entities.array("class", classArray ->
+            {
+              classArray.stringValue("entity");
+            });
+            entities.array("links", linksArray ->
+            {
+              linksArray.object(object->
+              {
+                object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getMatcher());
+                object.array("rel", relArray ->
                 {
-                  actionsArray.object(object ->
-                  {
-                    object.stringType("name","update");
-                    object.stringType("method", "PUT");
-                    object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
-                  });
-                  actionsArray.object(object ->
-                  {
-                    object.stringType("name","delete");
-                    object.stringType("method", "DELETE");
-                    object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
-                  });
-                });
-                entities.array("class", classArray ->
-                {
-                  classArray.stringValue("entity");
-                });
-                entities.array("links", linksArray ->
-                {
-                  linksArray.object(object->
-                  {
-                    object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getMatcher());
-                    object.array("rel", relArray ->
-                    {
-                      relArray.stringValue("self");
-                    });
-                  });
-                });
-                entities.object("properties", object->
-                {
-                  object.integerType("id", 1234);
-                });
-                entities.array("rel", relArray ->
-                {
-                  relArray.stringValue("item");
+                  relArray.stringValue("self");
                 });
               });
-              body.array("links", linksArray ->
+            });
+            entities.object("properties", object->
+            {
+              object.integerType("id", 1234);
+            });
+            entities.array("rel", relArray ->
+            {
+              relArray.stringValue("item");
+            });
+          });
+          body.array("links", linksArray ->
+          {
+            linksArray.object(object->
+            {
+              object.matchUrl2("href", "orders");
+              object.array("rel", relArray ->
               {
-                linksArray.object(object->
-                {
-                  object.matchUrl2("href", "orders");
-                  object.array("rel", relArray ->
-                  {
-                    relArray.stringValue("self");
-                  });
-                });
+                relArray.stringValue("self");
               });
-            }).build())
-        .toPact();
-  }
-
-  @Test
-  @PactTestFor(pactMethod = "getAllOrders")
-  public void testGetExistingUserByEmail(MockServer mockServer)
-  {
-    RestTemplate restTemplate =
-        new RestTemplateBuilder()
-            .rootUri(mockServer.getUrl())
-            .build();
-    try
-    {
-      restTemplate.getForEntity("/orders", String.class);
-    }
-    catch (Exception e)
-    {
-      fail("Unexpected exception", e);
-    }
-  }
-
-  @Pact(consumer="SpringConsumer")
-  public RequestResponsePact deleteOrder(PactDslWithProvider builder)
-  {
-    return builder
+            });
+          });
+        }).build())
         .uponReceiving("delete order")
         .matchPath("/orders/\\d+", "/orders/1234")
         .method("DELETE")
@@ -172,8 +122,8 @@ public class ContractTest
   }
 
   @Test
-  @PactTestFor(pactMethod = "deleteOrder")
-  public void testDeleteOrder(MockServer mockServer)
+  @PactTestFor(pactMethod = "deletesTheFirstOrderUsingtheDeleteAction")
+  public void testDeletesTheFirstOrderUsingtheDeleteAction(MockServer mockServer)
   {
     RestTemplate restTemplate =
         new RestTemplateBuilder()
@@ -181,6 +131,8 @@ public class ContractTest
             .build();
     try
     {
+      restTemplate.getForEntity("/", String.class);
+      restTemplate.getForEntity("/orders", String.class);
       restTemplate.delete("/orders/1234");
     }
     catch (Exception e)
