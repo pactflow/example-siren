@@ -158,4 +158,34 @@ public class ContractTest
       fail("Unexpected exception", e);
     }
   }
+
+  @Pact(consumer="SpringConsumer")
+  public RequestResponsePact deleteOrder(PactDslWithProvider builder)
+  {
+    return builder
+        .uponReceiving("delete order")
+        .matchPath("/orders/\\d+", "/orders/1234")
+        .method("DELETE")
+        .willRespondWith()
+        .status(200)
+        .toPact();
+  }
+
+  @Test
+  @PactTestFor(pactMethod = "deleteOrder")
+  public void testDeleteOrder(MockServer mockServer)
+  {
+    RestTemplate restTemplate =
+        new RestTemplateBuilder()
+            .rootUri(mockServer.getUrl())
+            .build();
+    try
+    {
+      restTemplate.delete("/orders/1234");
+    }
+    catch (Exception e)
+    {
+      fail("Unexpected exception", e);
+    }
+  }
 }

@@ -4,6 +4,27 @@
   },
   "interactions": [
     {
+      "description": "delete order",
+      "request": {
+        "matchingRules": {
+          "path": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "/orders/\\d+"
+              }
+            ]
+          }
+        },
+        "method": "DELETE",
+        "path": "/orders/1234"
+      },
+      "response": {
+        "status": 200
+      }
+    },
+    {
       "description": "get all orders",
       "request": {
         "method": "GET",
