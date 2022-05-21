@@ -13,17 +13,12 @@
         "body": {
           "age": 100,
           "happy": true,
-          "hexCode": "1234a",
           "id": 1234567890,
           "localAddress": "127.0.0.1",
           "name": "string"
         },
         "generators": {
           "body": {
-            "$.hexCode": {
-              "digits": 10,
-              "type": "RandomHexadecimal"
-            },
             "$.id": {
               "max": 2147483647,
               "min": 0,
@@ -45,15 +40,6 @@
               "matchers": [
                 {
                   "match": "type"
-                }
-              ]
-            },
-            "$.hexCode": {
-              "combine": "AND",
-              "matchers": [
-                {
-                  "match": "regex",
-                  "regex": "[0-9a-fA-F]+"
                 }
               ]
             },

@@ -1,7 +1,9 @@
 package de.juplo.demos.pact;
 
 import au.com.dius.pact.consumer.MockServer;
+import au.com.dius.pact.consumer.dsl.LambdaDsl;
 import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
+import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
 import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
@@ -24,13 +26,6 @@ public class ContractTest
   @Pact(consumer="SpringConsumer")
   public RequestResponsePact getOrders(PactDslWithProvider builder)
   {
-    PactDslJsonBody body = new PactDslJsonBody()
-        .stringType("name")
-        .booleanType("happy")
-        .hexValue("hexCode")
-        .id()
-        .ipAddress("localAddress")
-        .numberValue("age", 100);
     return builder
           .uponReceiving("get all orders")
             .path("/orders")
@@ -38,7 +33,15 @@ public class ContractTest
           .willRespondWith()
             .status(200)
             .headers(Map.of("Content-Type", "application/vnd.siren+json"))
-            .body(body)
+            .body(LambdaDsl.newJsonBody(body ->
+            {
+              body.stringType("name");
+              body.booleanType("happy");
+              // body.hexValue("hexCode");
+              body.id();
+              body.ipV4Address("localAddress");
+              body.numberValue("age", 100);
+            }).build())
         .toPact();
   }
 
