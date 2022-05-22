@@ -47,6 +47,10 @@ pact {
 			hasPactWith("Siren Consumer") {
 				pactSource = file("${projectDir}/../consumer/pacts/Siren Order Provider-Siren Order Service.json")
 			}
+
+			hasPactWith("Spring Consumer") {
+				pactSource = file("${projectDir}/../spring-consumer/target/pacts/SpringConsumer-SirenOrderProvider.json")
+			}
 		}
 	}
 }
