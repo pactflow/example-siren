@@ -66,14 +66,14 @@ public class ContractTest
             {
               actionsArray.object(object ->
               {
-                object.stringType("name","update");
-                object.stringType("method", "PUT");
+                object.stringValue("name","update");
+                object.stringValue("method", "PUT");
                 object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
               });
               actionsArray.object(object ->
               {
-                object.stringType("name","delete");
-                object.stringType("method", "DELETE");
+                object.stringValue("name","delete");
+                object.stringValue("method", "DELETE");
                 object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
               });
             });

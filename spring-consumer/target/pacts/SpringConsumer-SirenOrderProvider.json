@@ -138,22 +138,6 @@
                               "regex": ".*\\/(\\Qorders\\E\\/\\Q1234\\E)$"
                             }
                           ]
-                        },
-                        "$.method": {
-                          "combine": "AND",
-                          "matchers": [
-                            {
-                              "match": "type"
-                            }
-                          ]
-                        },
-                        "$.name": {
-                          "combine": "AND",
-                          "matchers": [
-                            {
-                              "match": "type"
-                            }
-                          ]
                         }
                       }
                     },
@@ -173,22 +157,6 @@
                             {
                               "match": "regex",
                               "regex": ".*\\/(\\Qorders\\E\\/\\Q1234\\E)$"
-                            }
-                          ]
-                        },
-                        "$.method": {
-                          "combine": "AND",
-                          "matchers": [
-                            {
-                              "match": "type"
-                            }
-                          ]
-                        },
-                        "$.name": {
-                          "combine": "AND",
-                          "matchers": [
-                            {
-                              "match": "type"
                             }
                           ]
                         }
