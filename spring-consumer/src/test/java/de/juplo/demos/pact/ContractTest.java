@@ -68,13 +68,13 @@ public class ContractTest
               {
                 object.stringValue("name","update");
                 object.stringValue("method", "PUT");
-                object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
+                object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getMatcher());
               });
               actionsArray.object(object ->
               {
                 object.stringValue("name","delete");
                 object.stringValue("method", "DELETE");
-                object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
+                object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getMatcher());
               });
             });
             entities.array("class", classArray ->

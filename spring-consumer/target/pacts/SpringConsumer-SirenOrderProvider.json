@@ -86,12 +86,12 @@
             },
             "$.entities[*][0].href": {
               "example": "http://localhost:8080/orders/1234",
-              "regex": ".*\\/(\\Qorders\\E\\/\\Q1234\\E)$",
+              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
               "type": "MockServerURL"
             },
             "$.entities[*][1].href": {
               "example": "http://localhost:8080/orders/1234",
-              "regex": ".*\\/(\\Qorders\\E\\/\\Q1234\\E)$",
+              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
               "type": "MockServerURL"
             },
             "$.links[0].href": {
@@ -124,7 +124,7 @@
                       "generators": {
                         "$.href": {
                           "example": "http://localhost:8080/orders/1234",
-                          "regex": ".*\\/(\\Qorders\\E\\/\\Q1234\\E)$",
+                          "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
                           "type": "MockServerURL"
                         }
                       },
@@ -135,7 +135,7 @@
                           "matchers": [
                             {
                               "match": "regex",
-                              "regex": ".*\\/(\\Qorders\\E\\/\\Q1234\\E)$"
+                              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$"
                             }
                           ]
                         }
@@ -145,7 +145,7 @@
                       "generators": {
                         "$.href": {
                           "example": "http://localhost:8080/orders/1234",
-                          "regex": ".*\\/(\\Qorders\\E\\/\\Q1234\\E)$",
+                          "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
                           "type": "MockServerURL"
                         }
                       },
@@ -156,7 +156,7 @@
                           "matchers": [
                             {
                               "match": "regex",
-                              "regex": ".*\\/(\\Qorders\\E\\/\\Q1234\\E)$"
+                              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$"
                             }
                           ]
                         }
