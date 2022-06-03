@@ -1,10 +1,7 @@
 package de.juplo.demos.pact;
 
 import au.com.dius.pact.consumer.MockServer;
-import au.com.dius.pact.consumer.dsl.LambdaDsl;
-import au.com.dius.pact.consumer.dsl.PactDslJsonBody;
-import au.com.dius.pact.consumer.dsl.PactDslJsonRootValue;
-import au.com.dius.pact.consumer.dsl.PactDslWithProvider;
+import au.com.dius.pact.consumer.dsl.*;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
 import au.com.dius.pact.core.model.RequestResponsePact;
@@ -20,11 +17,11 @@ import static org.assertj.core.api.Assertions.fail;
 
 
 @ExtendWith(PactConsumerTestExt.class)
-@PactTestFor(providerName = "Siren Order Provider")
+@PactTestFor(providerName = "SirenOrderProvider")
 public class ContractTest
 {
   @Pact(consumer="SpringConsumer")
-  public RequestResponsePact getOrders(PactDslWithProvider builder)
+  public RequestResponsePact getAllOrders(PactDslWithProvider builder)
   {
     return builder
           .uponReceiving("get all orders")
@@ -35,18 +32,68 @@ public class ContractTest
             .headers(Map.of("Content-Type", "application/vnd.siren+json"))
             .body(LambdaDsl.newJsonBody(body ->
             {
-              body.stringType("name");
-              body.booleanType("happy");
-              // body.hexValue("hexCode");
-              body.id();
-              body.ipV4Address("localAddress");
-              body.numberValue("age", 100);
+              body.array("class", classArray ->
+              {
+                classArray.stringValue("entity");
+              });
+              body.eachLike("entities", entities ->
+              {
+                entities.arrayContaining("actions", actionsArray->
+                {
+                  actionsArray.object(object ->
+                  {
+                    object.stringType("name","update");
+                    object.stringType("method", "PUT");
+                    object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
+                  });
+                  actionsArray.object(object ->
+                  {
+                    object.stringType("name","delete");
+                    object.stringType("method", "DELETE");
+                    object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getValue());
+                  });
+                });
+                entities.array("class", classArray ->
+                {
+                  classArray.stringValue("entity");
+                });
+                entities.array("links", linksArray ->
+                {
+                  linksArray.object(object->
+                  {
+                    object.matchUrl2("href", "orders", Matchers.regexp("\\d+", "1234").getMatcher());
+                    object.array("rel", relArray ->
+                    {
+                      relArray.stringValue("self");
+                    });
+                  });
+                });
+                entities.object("properties", object->
+                {
+                  object.integerType("id", 1234);
+                });
+                entities.array("rel", relArray ->
+                {
+                  relArray.stringValue("item");
+                });
+              });
+              body.array("links", linksArray ->
+              {
+                linksArray.object(object->
+                {
+                  object.matchUrl2("href", "orders");
+                  object.array("rel", relArray ->
+                  {
+                    relArray.stringValue("self");
+                  });
+                });
+              });
             }).build())
         .toPact();
   }
 
   @Test
-  @PactTestFor(pactMethod = "getOrders")
+  @PactTestFor(pactMethod = "getAllOrders")
   public void testGetExistingUserByEmail(MockServer mockServer)
   {
     RestTemplate restTemplate =
