@@ -1,4 +1,4 @@
-package de.juplo.demos.pact;
+package io.pactflow.example.sirenconsumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

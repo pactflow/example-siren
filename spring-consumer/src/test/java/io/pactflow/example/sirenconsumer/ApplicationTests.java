@@ -1,4 +1,4 @@
-package de.juplo.demos.pact;
+package io.pactflow.example.sirenconsumer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

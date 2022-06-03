@@ -1,4 +1,4 @@
-package de.juplo.demos.pact;
+package io.pactflow.example.sirenconsumer;
 
 import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.*;

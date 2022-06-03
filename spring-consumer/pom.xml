@@ -10,7 +10,7 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>de.juplo.demos.pact</groupId>
+	<groupId>io.pactflow.example.sirenconsumer.pact</groupId>
 	<artifactId>siren-consumer</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
