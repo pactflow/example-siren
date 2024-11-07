@@ -40,17 +40,17 @@ task stopServer(type: KillProcessTask)
 
 pact {
 	serviceProviders {
-		"Siren Order Provider" {
+		SirenOrderProvider {
 
 			startProviderTask = startServer
 			terminateProviderTask = stopServer
 
-			hasPactWith("Siren Consumer") {
-				pactSource = file("${projectDir}/../consumer/pacts/Siren Order Provider-Siren Order Service.json")
+			hasPactsWith("SirenConsumer") {
+				pactFileLocation = file("${projectDir}/../consumer/pacts")
 			}
 
-			hasPactWith("Spring Consumer") {
-				pactSource = file("${projectDir}/../spring-consumer/target/pacts/SpringConsumer-SirenOrderProvider.json")
+			hasPactsWith("SpringConsumer") {
+				pactFileLocation = file("${projectDir}/../spring-consumer/target/pacts")
 			}
 		}
 	}
