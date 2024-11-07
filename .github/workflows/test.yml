@@ -13,18 +13,21 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu' 
-          java-version: '17'
+          java-version: '11'
       - name: Set up Node JS
         uses: actions/setup-node@v4
         with:
           node-version: '18'
       - name: Test consumer siren project (js)
+        working-directory: consumer
         run: |
           npm install
           npm test
       - name: Test consumer siren project (java)
+        working-directory: spring-consumer
         run: |
           mvn test
       - name: Test provider siren project (java)
+        working-directory: provider
         run: |
           ./gradlew pactverify
