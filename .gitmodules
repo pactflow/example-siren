@@ -1,9 +1,0 @@
-[submodule "consumer"]
-	path = consumer
-	url = ../example-consumer-js-siren.git
-[submodule "spring-consumer"]
-	path = spring-consumer
-	url = ../example-consumer-java-siren.git
-[submodule "provider"]
-	path = provider
-	url = ../example-provider-java-siren.git
