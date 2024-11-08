@@ -4,19 +4,19 @@ import au.com.dius.pact.consumer.MockServer;
 import au.com.dius.pact.consumer.dsl.*;
 import au.com.dius.pact.consumer.junit5.PactConsumerTestExt;
 import au.com.dius.pact.consumer.junit5.PactTestFor;
+import au.com.dius.pact.core.model.PactSpecVersion;
 import au.com.dius.pact.core.model.RequestResponsePact;
 import au.com.dius.pact.core.model.annotations.Pact;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.web.client.RestTemplate;
-
+import org.springframework.hateoas.config.EnableHypermediaSupport;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.fail;
 
 
 @ExtendWith(PactConsumerTestExt.class)
+@EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 @PactTestFor(providerName = "SirenOrderProvider")
 public class ContractTest
 {
@@ -122,18 +122,12 @@ public class ContractTest
   }
 
   @Test
-  @PactTestFor(pactMethod = "deletesTheFirstOrderUsingtheDeleteAction")
+  @PactTestFor(pactMethod = "deletesTheFirstOrderUsingtheDeleteAction", pactVersion = PactSpecVersion.V3)
   public void testDeletesTheFirstOrderUsingtheDeleteAction(MockServer mockServer)
   {
-    RestTemplate restTemplate =
-        new RestTemplateBuilder()
-            .rootUri(mockServer.getUrl())
-            .build();
     try
     {
-      restTemplate.getForEntity("/", String.class);
-      restTemplate.getForEntity("/orders", String.class);
-      restTemplate.delete("/orders/1234");
+      Application.deleteFirstOrder(mockServer.getUrl());
     }
     catch (Exception e)
     {
