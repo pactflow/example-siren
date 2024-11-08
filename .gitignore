@@ -1,6 +1,7 @@
 .gradle
 build/
 node_modules/
+target/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -15,3 +16,5 @@ gradle-app.setting
 *.iml
 
 pacts/
+
+bin/

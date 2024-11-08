@@ -1,0 +1,260 @@
+{
+  "consumer": {
+    "name": "SpringConsumer"
+  },
+  "interactions": [
+    {
+      "description": "delete order",
+      "request": {
+        "matchingRules": {
+          "path": {
+            "combine": "AND",
+            "matchers": [
+              {
+                "match": "regex",
+                "regex": "/orders/\\d+"
+              }
+            ]
+          }
+        },
+        "method": "DELETE",
+        "path": "/orders/1234"
+      },
+      "response": {
+        "status": 200
+      }
+    },
+    {
+      "description": "get all orders",
+      "request": {
+        "method": "GET",
+        "path": "/orders"
+      },
+      "response": {
+        "body": {
+          "class": [
+            "entity"
+          ],
+          "entities": [
+            {
+              "actions": [
+                {
+                  "href": "http://localhost:8080/orders/1234",
+                  "method": "PUT",
+                  "name": "update"
+                },
+                {
+                  "href": "http://localhost:8080/orders/1234",
+                  "method": "DELETE",
+                  "name": "delete"
+                }
+              ],
+              "class": [
+                "entity"
+              ],
+              "links": [
+                {
+                  "href": "http://localhost:8080/orders/1234",
+                  "rel": [
+                    "self"
+                  ]
+                }
+              ],
+              "properties": {
+                "id": 1234
+              },
+              "rel": [
+                "item"
+              ]
+            }
+          ],
+          "links": [
+            {
+              "href": "http://localhost:8080/orders",
+              "rel": [
+                "self"
+              ]
+            }
+          ]
+        },
+        "generators": {
+          "body": {
+            "$.entities[*].links[0].href": {
+              "example": "http://localhost:8080/orders/1234",
+              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
+              "type": "MockServerURL"
+            },
+            "$.entities[*][0].href": {
+              "example": "http://localhost:8080/orders/1234",
+              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
+              "type": "MockServerURL"
+            },
+            "$.entities[*][1].href": {
+              "example": "http://localhost:8080/orders/1234",
+              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
+              "type": "MockServerURL"
+            },
+            "$.links[0].href": {
+              "example": "http://localhost:8080/orders",
+              "regex": ".*\\/(\\Qorders\\E)$",
+              "type": "MockServerURL"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/vnd.siren+json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.entities": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$.entities[*].actions": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "arrayContains",
+                  "variants": [
+                    {
+                      "generators": {
+                        "$.href": {
+                          "example": "http://localhost:8080/orders/1234",
+                          "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
+                          "type": "MockServerURL"
+                        }
+                      },
+                      "index": 0,
+                      "rules": {
+                        "$.href": {
+                          "combine": "AND",
+                          "matchers": [
+                            {
+                              "match": "regex",
+                              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    {
+                      "generators": {
+                        "$.href": {
+                          "example": "http://localhost:8080/orders/1234",
+                          "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
+                          "type": "MockServerURL"
+                        }
+                      },
+                      "index": 1,
+                      "rules": {
+                        "$.href": {
+                          "combine": "AND",
+                          "matchers": [
+                            {
+                              "match": "regex",
+                              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$"
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            "$.entities[*].links[0].href": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": ".*\\/(\\Qorders\\E\\/\\d+)$"
+                }
+              ]
+            },
+            "$.entities[*].properties.id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "integer"
+                }
+              ]
+            },
+            "$.links[0].href": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": ".*\\/(\\Qorders\\E)$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    },
+    {
+      "description": "get root",
+      "request": {
+        "method": "GET",
+        "path": "/"
+      },
+      "response": {
+        "body": {
+          "class": [
+            "representation"
+          ],
+          "links": [
+            {
+              "href": "http://localhost:8080/orders",
+              "rel": [
+                "orders"
+              ]
+            }
+          ]
+        },
+        "generators": {
+          "body": {
+            "$.links[0].href": {
+              "example": "http://localhost:8080/orders",
+              "regex": ".*\\/(\\Qorders\\E)$",
+              "type": "MockServerURL"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/vnd.siren+json"
+        },
+        "matchingRules": {
+          "body": {
+            "$.links[0].href": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": ".*\\/(\\Qorders\\E)$"
+                }
+              ]
+            }
+          }
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-jvm": {
+      "version": "4.2.2"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "SirenOrderProvider"
+  }
+}

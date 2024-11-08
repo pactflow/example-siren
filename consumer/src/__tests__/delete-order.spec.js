@@ -1,11 +1,6 @@
 const path = require("path")
-const chai = require("chai")
-const chaiAsPromised = require("chai-as-promised")
-const expect = chai.expect
-const { PactV3, MatchersV3 } = require("@pact-foundation/pact/v3")
+const { PactV3, MatchersV3 } = require("@pact-foundation/pact")
 const { deleteFirstOrder } = require('../consumer')
-
-chai.use(chaiAsPromised)
 
 const {
   eachLike,
@@ -20,8 +15,8 @@ describe("Siren Pact test", () => {
 
   beforeEach(() => {
     provider = new PactV3({
-      consumer: "Siren Order Provider",
-      provider: "Siren Order Service",
+      consumer: "SirenConsumer",
+      provider: "SirenOrderService",
       dir: path.resolve(process.cwd(), "pacts")
     })
   })
@@ -32,7 +27,8 @@ describe("Siren Pact test", () => {
       // Get Root Request
       .uponReceiving("get root")
       .withRequest({
-        path: "/",
+        method: "GET",
+        path: "/"
       })
       .willRespondWith({
         status: 200,
@@ -48,6 +44,7 @@ describe("Siren Pact test", () => {
       // Get Orders Request
       .uponReceiving("get all orders")
       .withRequest({
+        method: "GET",
         path: "/orders",
       })
       .willRespondWith({
@@ -102,7 +99,7 @@ describe("Siren Pact test", () => {
       })
 
     return provider.executeTest(mockserver => {
-      return expect(deleteFirstOrder(mockserver.url)).to.eventually.be.true
+      return expect(deleteFirstOrder(mockserver.url)).resolves.toBe(true)
     })
   })
 })
