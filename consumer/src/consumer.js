@@ -5,7 +5,6 @@ async function deleteFirstOrder(url) {
 
   const ordersResource = await client.follow('orders')
   const ordersResp = await ordersResource.get()
-
   const firstOrder = ordersResp.getEmbedded()[0]
   let deleteAction = firstOrder.action('delete')
   deleteAction.client = client
