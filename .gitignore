@@ -15,4 +15,6 @@ gradle-app.setting
 .idea/
 *.iml
 
-# pacts/
+pacts/
+
+bin/

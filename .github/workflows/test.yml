@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up JDK 17
+      - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu' 
@@ -27,7 +27,16 @@ jobs:
         working-directory: spring-consumer
         run: |
           mvn test
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu' 
+          java-version: '17'
       - name: Test provider siren project (java)
         working-directory: provider
         run: |
           ./gradlew pactverify
+      - name: Test provider siren project (java)
+        working-directory: provider
+        run: |
+          ./gradlew clean test --info
