@@ -1,15 +1,15 @@
+
 plugins {
-	id 'org.springframework.boot' version '2.3.4.RELEASE'
+	id 'org.springframework.boot' version '2.5.15'
 	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
 	id 'java'
-	id "io.freefair.lombok" version "5.2.1"
-	id "au.com.dius.pact" version "4.2.2"
-	id "com.wiredforcode.spawn" version "0.8.2"
+	id "io.freefair.lombok" version "6.6.3"
+	id "au.com.dius.pact" version "4.5.13"
 }
 
 group = 'io.pactflow.example'
 version = '0.0.1'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 repositories {
 	mavenLocal()
@@ -19,24 +19,45 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 	implementation 'com.jayway.jsonpath:json-path'
-	implementation 'de.ingogriebsch.hateoas:spring-hateoas-siren:1.0.0'
+	implementation 'de.ingogriebsch.hateoas:spring-hateoas-siren:1.3.0'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	testImplementation 'au.com.dius.pact.provider:junit5spring:4.2.2'
+	    // testImplementation("au.com.dius.pact.provider:junit5:4.6.5")
+	    testImplementation("au.com.dius.pact.provider:junit5spring:4.6.5")
 }
 
 test {
 	useJUnitPlatform()
 }
 
-task startServer(type: SpawnProcessTask, dependsOn: 'assemble') {
-	command "java -jar ${projectDir}/build/libs/siren-provider-0.0.1.jar"
-	ready 'Started SirenProviderApplication'
+import java.util.concurrent.atomic.AtomicReference
+def serverProcess = new AtomicReference<Process>()
+
+task startServer(dependsOn: 'assemble') {
+    doLast {
+		def command = ["java", "-jar", "${projectDir}/build/libs/siren-provider-0.0.1.jar"] as String[]
+        def processBuilder = new ProcessBuilder(command)
+        processBuilder.redirectErrorStream(true)
+        processBuilder.redirectOutput(ProcessBuilder.Redirect.INHERIT)
+        serverProcess.set(processBuilder.start())
+        println 'Server started'
+		Thread.sleep(15000)
+    }
 }
 
-task stopServer(type: KillProcessTask)
+task stopServer {
+    doLast {
+        def process = serverProcess.get()
+        if (process != null) {
+            process.destroy()
+            println 'Server stopped'
+        } else {
+            println 'No server process found'
+        }
+    }
+}
 
 pact {
 	serviceProviders {
