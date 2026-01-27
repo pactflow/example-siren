@@ -15,7 +15,7 @@ jobs:
           distribution: 'zulu' 
           java-version: '11'
       - name: Set up Node JS
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
         with:
           node-version: '18'
       - name: Test consumer siren project (js)
