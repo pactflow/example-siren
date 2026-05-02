@@ -10,7 +10,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@pact-foundation/pact": "16.3.0",
+    "@pact-foundation/pact": "16.3.1",
     "jest": "30.3.0"
   },
   "dependencies": {
