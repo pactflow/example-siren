@@ -84,16 +84,6 @@
               "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
               "type": "MockServerURL"
             },
-            "$.entities[*][0].href": {
-              "example": "http://localhost:8080/orders/1234",
-              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
-              "type": "MockServerURL"
-            },
-            "$.entities[*][1].href": {
-              "example": "http://localhost:8080/orders/1234",
-              "regex": ".*\\/(\\Qorders\\E\\/\\d+)$",
-              "type": "MockServerURL"
-            },
             "$.links[0].href": {
               "example": "http://localhost:8080/orders",
               "regex": ".*\\/(\\Qorders\\E)$",
@@ -248,7 +238,7 @@
   ],
   "metadata": {
     "pact-jvm": {
-      "version": "4.2.2"
+      "version": "4.7.5"
     },
     "pactSpecification": {
       "version": "3.0.0"

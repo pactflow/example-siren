@@ -3,10 +3,11 @@ package io.pactflow.example.sirenconsumer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
-import org.springframework.hateoas.mediatype.hal.Jackson2HalModule;
+import org.springframework.hateoas.mediatype.hal.HalJacksonModule;
 import org.springframework.hateoas.EntityModel;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,10 @@ public class Application
 	public static boolean deleteFirstOrder(String url) {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			ObjectMapper mapper = new ObjectMapper();
-			mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-			mapper.registerModule(new Jackson2HalModule());
+			ObjectMapper mapper = JsonMapper.builder()
+				.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+				.addModule(new HalJacksonModule())
+				.build();
 
 
 
