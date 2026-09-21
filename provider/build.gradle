@@ -11,6 +11,9 @@ group = 'io.pactflow.example'
 version = '0.0.1'
 sourceCompatibility = '17'
 
+// pact-jvm 4.7 needs a newer Kotlin runtime than the Spring Boot 2.7 BOM pins.
+ext['kotlin.version'] = '2.3.20'
+
 repositories {
 	mavenLocal()
 	mavenCentral()
