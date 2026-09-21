@@ -99,8 +99,9 @@ The consumer does the following:
 2. Find the orders relation
 3. Execute a GET to the URL of the orders relation
 4. Extract the first order entity from the embedded entities
-5. Find the delete action for that order
-6. Execute the action (which executes a DELETE to the URL of the action) 
+5. Execute a GET to the self URL of that order (Ketting does not keep the actions of embedded entities)
+6. Find the delete action for that order
+7. Execute the action (which executes a DELETE to the URL of the action)
 
 ## Pact Tests
 

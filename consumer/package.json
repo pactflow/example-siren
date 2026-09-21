@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/run.js",
-    "test": "jest"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "author": "",
   "license": "MIT",
