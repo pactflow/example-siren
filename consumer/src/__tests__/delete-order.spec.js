@@ -88,6 +88,43 @@ describe("Siren Pact test", () => {
         }
       })
 
+      // Get Order Request
+      .uponReceiving("get order")
+      .withRequest({
+        method: "GET",
+        path: regex("/orders/\\d+", "/orders/1234"),
+      })
+      .willRespondWith({
+        status: 200,
+        headers: {
+          'Content-Type': 'application/vnd.siren+json'
+        },
+        body: {
+          class: [ "entity" ],
+          properties: {
+            "id": integer(1234)
+          },
+          links: [
+            {
+              "rel": [ "self" ],
+              "href": url(["orders", regex("\\d+", "1234")])
+            }
+          ],
+          "actions": arrayContaining(
+            {
+              "name": "update",
+              "method": "PUT",
+              "href": url(["orders", regex("\\d+", "1234")])
+            },
+            {
+              "name": "delete",
+              "method": "DELETE",
+              "href": url(["orders", regex("\\d+", "1234")])
+            }
+          )
+        }
+      })
+
       // Delete Order Request
       .uponReceiving("delete order")
       .withRequest({
